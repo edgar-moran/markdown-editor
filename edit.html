@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>☢</title>
+<!-- INCLUDE_START -->
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="stylesheet" href="css/style.min.css">
+<script type="text/javascript" src="js/base64.min.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script type="text/javascript" src="js/marked.min.js"></script>
+<script type="text/javascript" src="js/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="js/lodash.min.js"></script>
+<script type="text/javascript" src="js/com.js"></script>
+<script type="text/javascript" src="js/sjcl.js"></script>
+<!-- INCLUDE_END -->
+
+<script type="text/javascript">
+var password = "" ;
+var separator = "#/" ;
+var page = {
+	name: ""
+	, path: ""
+	, href: ""
+	, url: ""
+	, data: ""
+	, readOnly: false
+} ;
+function renderHTML( id, data64 ) {
+	document.getElementById(id).innerHTML = "" ;
+	data = Base64.decode(data64) ;
+	document.getElementById(id).innerHTML = marked( data, { sanitize: true } ) ;
+	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\(title:.*\).*$/m ))!=null ) {
+		document.title = res[0].replace( /.*\(title:/, "" ).replace( /\).*/, "" ) ;
+	}
+}
+function doLoad( name ) {
+	reg = new RegExp( '^' + separator  ) ;
+	name = name.replace( reg, "" ) ;		//name = location.hash.replace( /^#\//, "" ) ;
+	reg = null ;
+	page.name = name ;
+	page.path = location.protocol + "//" + location.host + location.pathname.replace( /\/[^\/]*$/,"/" ) ;
+	page.href = location.protocol + "//" + location.host + location.pathname + separator + page.name ;
+	page.script = location.protocol + "//" + location.host + location.pathname ;
+	page.url = location.protocol + "//" + location.host + location.pathname.replace( /\/[^\/]*$/,"/" ) + name ;
+	page.data = null ;
+//console.log( page ) ;
+	loadPage( page.url
+		, function(res) { 
+			data = res ;
+			if( data.match( /^!PASS/ ) ) {
+				if( password=="" ) { doPass() ; }
+				data = data.replace( /^!PASS/, "" ) ;
+				data = sjcl.decrypt( password, data ) ;
+			}
+			page.data = Base64.encode( data ) ;
+			document.title = page.name ;
+			renderHTML( "content", page.data ) ;
+		}
+		, function() { 
+			if( page.name.match( /\.md$/ ) ) {
+				swal( "Oops", "Something went wrong!<br/>Unable to open <u>" + name + "</u> file", "error" ) ;
+				page.data = Base64.encode( "\n[//]: # (title:"+page.name+")\n" ) ;
+				renderHTML( "content", page.data ) ;
+				switchToEditor() ;
+			} else {
+				doLoad( page.name+".md" ) ;
+			}
+		} 
+	) ;
+}
+function init() {
+	if( location.hash=="" ) { 
+		location.replace( location.href+"#/index.md" ) ; 
+	} else {
+		if( sessionStorage.getItem( "MDEditorPassword" ) ) { password = sessionStorage.getItem( "MDEditorPassword" ) ; }
+		else { password = "" ; }
+		doLoad( location.hash ) ;
+	}
+}
+function switchToEditor() {
+	if( page.readOnly ) { return ; }
+	document.getElementById("content").style.display = 'none' ;
+	document.getElementById('ttxt').value = '' ;
+	document.getElementById('ttxt').value = Base64.decode( page.data ) ;
+	document.getElementById("editor").style.display = 'block' ;
+	document.getElementById('ttxt').focus() ;
+	document.getElementById('ttxt').click();
+}
+function switchToContent() {
+	page.data = Base64.encode( document.getElementById('ttxt').value ) ;
+	renderHTML( "content", page.data ) ;
+	document.getElementById("editor").style.display = 'none' ;
+	document.getElementById("content").style.display = 'block' ;
+}
+function doSave() { 
+	if( page!=null ) {
+		if( password == "" ) {
+			data = Base64.encode(document.getElementById('ttxt').value) ;
+		} else {
+			data = Base64.encode( "!PASS" + sjcl.encrypt( password, document.getElementById('ttxt').value ) ) ;
+		}
+		savePage( "edit.php"
+			, page.name
+			, data
+			, function() { swal( 'Good job!', 'Everything is fine!', 'success' ) ; switchToContent() ; }
+			, function() { swal( "Oops", "Something went wrong!", "error" ) ; } 
+		) ; 
+	}
+}
+function doHash( h ) {
+	if( !h.match( /^#\// ) ) { h = "#/" + h ; }
+	location.assign( page.script + h ) ;
+	location.reload( true ) ;
+}
+function doJump( ev ) {
+	url = ev.hash ;
+	if( url == "" ) {
+		url = ev.attributes[0].nodeValue ;
+		if( !url.match( /^http[s]?:\/\// ) ) { 
+			url = page.path + '/' + url ;
+			url = url.replace( /\/\//g, "/" ) ;
+		}
+		location.assign( url ) ;
+		return false;
+	} else {
+		doHash( url ) ;
+		return false ;
+	}
+}
+function doPass() {
+	password = window.prompt( "Protected mode. Please enter the password:", password ) ;
+	if( password == null ) { password = "" ; }
+	if( password == "" ) {
+		sessionStorage.removeItem( "MDEditorPassword" ) ;
+	} else {
+		sessionStorage.setItem( "MDEditorPassword", password ) ;
+	}
+}
+function doScroll(el) {
+	pos = el.scrollTop/el.scrollHeight ;
+	console.log( el.scrollTop/el.scrollHeight ) ;
+	document.getElementById('editor').scrollTop = int(pos * document.getElementById('editor').scrollHeight ) ;
+}
+</script>
+<style type="text/css">
+#content {
+  padding: 3%;
+}
+</style>
+
+</head>
+<body onLoad="init();">
+
+<div id="editor" style="display: none;">
+  <textarea id="ttxt" v-on:click="update" @keyup.alt.83="doSave();" @keyup.alt.80="doPass();" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
+  <div v-html="compiledMarkdown"></div>
+</div>
+
+<div id="content" onDblClick="switchToEditor();"></div>
+
+<script type="text/javascript">
+new Vue({
+  el: '#editor',
+  data: {
+    input: '[comment]: <> (This is a comment, it will not be included)'
+  },
+  computed: {
+    compiledMarkdown: function () {
+      return marked(this.input, { sanitize: true } )
+    }
+  },
+  methods: {
+    update: _.debounce(function (e) {
+      this.input = e.target.value
+    }, 300)
+  }
+}) ;
+
+document.getElementById("content").onclick = function(ev) {
+	if( ev.srcElement.nodeName == "A" ) {
+		doJump( ev.srcElement ) ;
+	}
+}
+window.onhashchange = function() {
+	if( document.getElementById('content').style.display=='none' ) { switchToContent() ; return false ; } 
+	else if (window.location.hash != '#undefined') {
+	    doHash( window.location.hash ) ;
+	}
+}
+window.document.getElementById("ttxt").addEventListener("scroll", function (event) {
+    var scroll = this.scrollY;
+    console.log(scroll)
+});
+</script>
+
+
+</body>
+</html>
+
