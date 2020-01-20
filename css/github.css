@@ -1,3 +1,6 @@
+html,body,#editor{ margin: 0; height: 100%; font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; }
+textarea, #editor div{display: inline-block;width: 49%;height: 100%;vertical-align: top;box-sizing: border-box;padding: 0 20px;}
+textarea{border: none;border-right: 1px solid #ccc;resize: none;outline: none;background-color: #f6f6f6;font-size: 14px;font-family: 'Monaco', courier, monospace;padding: 20px;}
 body {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
@@ -35,7 +38,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative; }
 
 h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
-  background: url("para.png") no-repeat 10px center;
+  background: url("../../images/modules/styleguide/para.png") no-repeat 10px center;
   text-decoration: none; }
 
 h1 tt, h1 code {
@@ -82,7 +85,7 @@ p, blockquote, ul, ol, dl, li, table, pre {
   margin: 15px 0; }
 
 hr {
-  background: transparent url("dirty-shade.png") repeat-x 0 0;
+  background: transparent url("../../images/modules/pulls/dirty-shade.png") repeat-x 0 0;
   border: 0 none;
   color: #cccccc;
   height: 4px;
@@ -239,14 +242,6 @@ span.float-right {
     overflow: hidden;
     margin: 13px auto 0;
     text-align: right; }
-
-code {
-    padding: 2px 4px;
-    font-size: 90%;
-    color: #c0341d;
-    background-color: #fcefed;
-    border-radius: 3px;
-}
 
 code, tt {
   margin: 0 2px;

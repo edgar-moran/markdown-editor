@@ -37,5 +37,6 @@ Options -Indexes
 	Header set Pragma "no-cache"
 	Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
 	Header set Expires "0"
+	Header set X-Salt 65536
   </FilesMatch>
 </IfModule>

@@ -36,7 +36,11 @@ function loadPage(page,fctok,fctko) {
 		if(xhr.readyState == 1) {
 		} else if(xhr.readyState == 4) {
 			if( xhr.status == 200 ) {
-				fctok( xhr.responseText ) ;
+				if( xhr.getResponseHeader("X-Salt") != null ) { 
+					fctok( xhr.responseText, xhr.getResponseHeader("X-Salt") ) ;
+				} else {
+					fctok( xhr.responseText, "" ) ;
+				}
 			} else {
 				fctko() ;
 			}
