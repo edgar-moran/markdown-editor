@@ -198,7 +198,7 @@ function doLoad( name ) {
 	else { password = "" ; }
 	if( sessionStorage.getItem( "MDStyle" ) ) { style = sessionStorage.getItem( "MDStyle" ) ; switch_style( style ) ; }
 	
-console.log( page ) ;
+//console.log( page ) ;
 	loadPage( page.url
 		, function(res,s) { 
 			data = res ;
@@ -267,6 +267,8 @@ function switchToEditor() {
 	document.getElementById('ttxt').value = '' ;
 	document.getElementById('ttxt').value = Base64.decode( page.data ) ;
 	document.getElementById("editor").style.display = 'block' ;
+	document.getElementById('ttxt').style.scrollTop = 0 ;
+	document.getElementById('ttxt').style.height = document.getElementById("editor").offsetHeight ;
 	document.getElementById('ttxt').focus() ;
 	document.getElementById('ttxt').click();
 }
@@ -321,6 +323,7 @@ function doPass() {
 	}
 }
 function doScroll(el) {
+	el.style.height = document.getElementById("editor").scrollHeight ;
 	pos = el.scrollTop/el.scrollHeight ;
 //	console.log( el.scrollTop/el.scrollHeight ) ;
 	document.getElementById('editor').scrollTop = parseInt(pos * document.getElementById('editor').scrollHeight ) ;
@@ -329,6 +332,9 @@ function doScroll(el) {
 <style type="text/css">
 #content {
   padding: 3%;
+}
+#ttxt {
+  resize: vertical;
 }
 </style>
 
@@ -355,6 +361,7 @@ new Vue({
   },
   methods: {
     update: _.debounce(function (e) {
+      document.getElementById('ttxt').style.height = document.getElementById("editor").scrollHeight + 'px' ;
       this.input = e.target.value
     }, 300)
   }
@@ -371,10 +378,11 @@ window.onhashchange = function() {
 	    doHash( window.location.hash ) ;
 	}
 }
+/*
 window.document.getElementById("ttxt").addEventListener("scroll", function (event) {
     var scroll = this.scrollY;
 //    console.log(scroll)
-});
+});*/
 </script>
 
 

@@ -5,6 +5,10 @@ html, body, #editor {
   color: #333;
 }
 
+#editor {
+	width: 100%;
+}
+
 textarea, #editor div {
   display: inline-block;
   width: 49%;
