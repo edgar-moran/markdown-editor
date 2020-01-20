@@ -23,5 +23,6 @@ It produces a new file **install.php**. Just upload it on your web site and call
 - To switch from page viewer to page editor, just double-click
 - To protect the page with password ALT+p
 - To save the page press ALT+o
+- To switch from embedded stylesheet press ALT+t
 - To switch back to the viewer press escape key
 
