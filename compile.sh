@@ -1,8 +1,10 @@
 #!/bin/sh
 
+main_file="edit.html"
+
 {
 
-sed  '/INCLUDE_START/,$d' edit.html
+sed  '/INCLUDE_START/,$d' ${main_file}
 
 echo -n '<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,' ; base64 favicon.ico|tr -d '\n' ; echo '">'
 echo -n '<style type="text/css" title="original">' ; cat css/style.min.css | tr -d '\n' ; echo '</style>'
@@ -17,7 +19,7 @@ echo -n '<script type="text/javascript">' ; cat js/lodash.min.js | tr -d '\n' ; 
 echo -n '<script type="text/javascript">' ; cat js/com.js ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/sjcl.js ; echo '</script>'
 
-sed  '1,/INCLUDE_END/d' edit.html
+sed  '1,/INCLUDE_END/d' ${main_file}
 
 } > index.html
 

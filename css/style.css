@@ -22,12 +22,3 @@ textarea {
   font-family: 'Monaco', courier, monospace;
   padding: 20px;
 }
-
-#editor {
-  position: relative;
-  left: 50%;
-}
-
-code {
-  color: #f66;
-}

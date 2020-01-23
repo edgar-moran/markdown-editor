@@ -233,7 +233,7 @@ var i, link_tag ;
  for (i = 0, link_tag = document.getElementsByTagName("style") ;
     i < link_tag.length ; i++ ) {
     if( link_tag[i].title ) {
-      link_tag[i].disabled = true ;
+      if( link_tag[i].title!="ttxt" ) { link_tag[i].disabled = true ; }
       if (link_tag[i].title == style) {
         link_tag[i].disabled = false ;
       }
@@ -250,6 +250,15 @@ var i, link_tag ;
       }
     }
   }
+ for (i = 0, link_tag = document.getElementsByTagName("style") ;
+    i < link_tag.length ; i++ ) {
+    if( link_tag[i].title ) {
+      if (link_tag[i].title == "ttxt") {
+        link_tag[i].disabled = false ;
+      }
+    }
+  }
+  link_tag = null ;
   sessionStorage.setItem( "MDStyle", style ) ;
 }
 function init() {
@@ -275,6 +284,7 @@ function switchToContent() {
 	renderHTML( "content", page.data ) ;
 	document.getElementById("editor").style.display = 'none' ;
 	document.getElementById("content").style.display = 'block' ;
+	document.documentElement.scrollTop = 0 ;
 }
 function doSave() { 
 	if( page!=null ) {
@@ -325,16 +335,28 @@ function doScroll(el) {
 	document.documentElement.scrollTop = parseInt(pos * document.documentElement.scrollHeight ) ;
 }
 </script>
-<style type="text/css">
+<style type="text/css" title="ttxt">
 #content {
   padding: 3%;
 }
 
 #ttxt {
   position: fixed;
+  display: inline-block;
   left: 3px;
+  top: 0px;
   resize: vertical;
   height: 100%;
+  width: 49%;
+}
+
+#editor {
+  position: relative;
+  left: 50%;
+}
+
+code {
+  color: #f66;
 }
 </style>
 
