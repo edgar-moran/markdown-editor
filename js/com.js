@@ -20,6 +20,26 @@ function getParams() {
 	}
 	return params;
 }
+function setSelectionRange(input, selectionStart, selectionEnd) {
+  if (input.setSelectionRange) {
+    input.focus();
+    input.setSelectionRange(selectionStart, selectionEnd);
+  }
+  else if (input.createTextRange) {
+    var range = input.createTextRange();
+    range.collapse(true);
+    range.moveEnd('character', selectionEnd);
+    range.moveStart('character', selectionStart);
+    range.select();
+  }
+}
+function setCaretToPos (input, pos) {
+   setSelectionRange(input, pos, pos);
+}
+function force_scroll(el, pct) {
+	if( el==null ) { return ; }
+	el.scrollTop = parseInt( pct * el.scrollHeight ) ;
+}
 function loadPage(page,fctok,fctko) {
 	var xhr = null ;
 	try { xhr = new XMLHttpRequest() ;

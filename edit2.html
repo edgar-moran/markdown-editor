@@ -38,9 +38,13 @@ function renderHTML( id, data64 ) {
 	document.getElementById(id).innerHTML = "" ;
 	data = Base64.decode(data64) ;
 	document.getElementById(id).innerHTML = marked( data, { sanitize: true } ) ;
-	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\(title:.*\).*$/m ))!=null ) {
-		document.title = res[0].replace( /.*\(title:/, "" ).replace( /\).*/, "" ) ;
+	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*title:.*\).*$/m ))!=null ) {
+		document.title = res[0].replace( /.*\([ ]*title:/, "" ).replace( /[ ]*\).*$/, "" ) ;
 	}
+	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*style:.*\).*$/m ))!=null ) {
+		switch_style( res[0].replace( /.*\([ ]*style:[ ]*/, "" ).replace( /[ ]*\).*$/, "" ) ) ;
+	}
+	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*readonly[ ]*\).*$/m ))!=null ) { page.readOnly = true ; }
 }
 function doLoad( name ) {
 	reg = new RegExp( '^' + separator  ) ;
@@ -129,24 +133,29 @@ function init() {
 	} else {
 		doLoad( location.hash ) ;
 	}
+	var Params = getParams() ;
+	if( Params.style ) { switch_style( Params.style ) ; }
+	Params = null ;
 }
 function switchToEditor() {
 	if( page.readOnly ) { return ; }
+	pct = document.documentElement.scrollTop/ document.documentElement.scrollHeight ;
 	document.getElementById("content").style.display = 'none' ;
 	document.getElementById('ttxt').value = '' ;
 	document.getElementById('ttxt').value = Base64.decode( page.data ) ;
-	document.getElementById('ttxt').scrollTop = 0 ;
 	document.getElementById("editor").style.display = 'block' ;
-	//document.getElementById('ttxt').style.height = document.getElementById("editor").offsetHeight ;
-	document.getElementById('ttxt').focus() ;
+	//document.getElementById('ttxt').focus() ;
+	//setCaretToPos(document.getElementById('ttxt'),0);
+	force_scroll( document.getElementById('ttxt'), pct ) ;
 	document.getElementById('ttxt').click() ;
 }
 function switchToContent() {
+	pct = document.documentElement.scrollTop/ document.documentElement.scrollHeight ;
 	page.data = Base64.encode( document.getElementById('ttxt').value ) ;
 	renderHTML( "content", page.data ) ;
 	document.getElementById("editor").style.display = 'none' ;
 	document.getElementById("content").style.display = 'block' ;
-	document.documentElement.scrollTop = 0 ;
+	force_scroll( document.documentElement, pct ) ;
 }
 function doSave() { 
 	if( page!=null ) {
@@ -194,7 +203,7 @@ function doPass() {
 }
 function doScroll(el) {
 	pos = el.scrollTop/el.scrollHeight ;
-	document.documentElement.scrollTop = parseInt(pos * document.documentElement.scrollHeight ) ;
+	force_scroll( document.documentElement, pos ) ;
 }
 </script>
 <style type="text/css" title="ttxt">
@@ -219,8 +228,9 @@ function doScroll(el) {
 
 code {
   color: #f66;
+  overflow: visible;
+  overflow-wrap: break-word;
 }
-
 </style>
 
 </head>
