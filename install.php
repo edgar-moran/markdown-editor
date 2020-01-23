@@ -11,5 +11,7 @@ if( !file_exists("edit.php") ) { file_put_contents( "edit.php", base64_decode($e
 if( !file_exists("favicon.ico") ) { file_put_contents( "favicon.ico", base64_decode($fav) ) ; }
 if( !file_exists("pass") ) { mkdir("pass") ; }
 if( !file_exists("pass/.htaccess") ) { file_put_contents( "pass/.htaccess", "deny from all" ) ; }
+if( !file_exists("pages") ) { mkdir("pages") ; }
+if( !file_exists("img") ) { mkdir("img") ; }
 header("Location: index.html");
 ?>
