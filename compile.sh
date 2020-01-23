@@ -1,6 +1,6 @@
 #!/bin/sh
 
-main_file="edit2.html"
+main_file="edit.html"
 
 {
 
