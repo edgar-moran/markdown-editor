@@ -32,9 +32,10 @@ echo -n '$htaccess="' ; base64 .htaccess|tr -d '\n' ; echo '";' ;
 echo -n '$edit="' ; base64 edit.php|tr -d '\n' ; echo '";' ;
 echo -n '$fav="' ; base64 favicon.ico|tr -d '\n' ; echo '";' ;
 echo
-echo 'if( !file_exists(".htaccess") ) { file_put_contents( ".htaccess", base64_decode($htaccess) ) ; }'
-echo 'if( !file_exists("favicon.ico") ) { file_put_contents( "favicon.ico", base64_decode($fav) ) ; }'
 echo 'if( !file_exists("index.html") ) { file_put_contents( "index.html", base64_decode($index) ) ; }'
+echo 'if( !file_exists(".htaccess") ) { file_put_contents( ".htaccess", base64_decode($htaccess) ) ; }'
+echo 'if( !file_exists("edit.php") ) { file_put_contents( "edit.php", base64_decode($edit) ) ; }'
+echo 'if( !file_exists("favicon.ico") ) { file_put_contents( "favicon.ico", base64_decode($fav) ) ; }'
 echo 'if( !file_exists("pass") ) { mkdir("pass") ; }'
 echo 'if( !file_exists("pass/.htaccess") ) { file_put_contents( "pass/.htaccess", "deny from all" ) ; }'
 echo 'header("Location: index.html");'
