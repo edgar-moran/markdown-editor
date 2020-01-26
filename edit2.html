@@ -98,12 +98,24 @@ function doLoad( name ) {
 		} 
 	) ;
 }
+var style_list = [ "original", "github", "gitlab" ] ;
 function switch_style(css_title) {
 	if( css_title == null ) {
-		if( style == "original" ) { style = "github" ; }
+		var n = style_list.indexOf( style ) + 1 ;
+		if( n>=style_list.length ) { n = 0 ; }
+		style = style_list[n] ;
+		/*if( style == "original" ) { style = "github" ; }
 		else if( style == "github" ) { style = "gitlab" ; }
-		else { style = "original" ; }
-	} else { style = css_title ; }
+		else { style = "original" ; }*/
+		n = null ;
+	} else {
+		if( style_list.indexOf(css_title)==-1 ) {
+			loadjscssfile(css_title+".css", "css", css_title) ;
+			style_list.push(css_title) ;
+		} 
+		if( style_list.indexOf(css_title)==-1 ) { return ; }
+		style = css_title ; 
+	}
 var i, link_tag ;
 
  for (i = 0, link_tag = document.getElementsByTagName("style") ;
