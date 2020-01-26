@@ -9,6 +9,7 @@ sed  '/INCLUDE_START/,$d' ${main_file}
 echo -n '<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,' ; base64 favicon.ico|tr -d '\n' ; echo '">'
 echo -n '<style type="text/css" title="original">' ; cat css/style.min.css | tr -d '\n' ; echo '</style>'
 echo -n '<style type="text/css" title="github">' ; cat css/github.min.css | tr -d '\n' ; echo '</style>'
+echo -n '<style type="text/css">' ; cat css/highlight.min.css | tr -d '\n' ; echo '</style>'
 
 echo -n '<script type="text/javascript">' ; cat js/base64.min.js | tr -d '\n' ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/crc32.min.js | tr -d '\n' ; echo '</script>'
@@ -16,6 +17,7 @@ echo -n '<script type="text/javascript">' ; cat js/vue.min.js | tr -d '\n' ; ech
 echo -n '<script type="text/javascript">' ; cat js/marked.min.js | tr -d '\n' ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/sweetalert2.all.min.js | tr -d '\n' ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/lodash.min.js | tr -d '\n' ; echo '</script>'
+echo -n '<script type="text/javascript">' ; cat js/highlight.min.js | tr -d '\n' ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/com.js ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/sjcl.js ; echo '</script>'
 
