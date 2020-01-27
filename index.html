@@ -215,6 +215,7 @@ b){var c={},d;for(d=0;d<b.length;d++)void 0!==a[b[d]]&&(c[b[d]]=a[b[d]]);return 
 "undefined"!==typeof module&&module.exports&&(module.exports=sjcl);"function"===typeof define&&define([],function(){return sjcl});
 </script>
 
+<script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
 var password = "" ;
 var salt = "" ;
@@ -230,13 +231,22 @@ var page = {
 	, data: ""
 	, readOnly: false
 } ;
+function doMarked( data ) {
+	//return  marked( data, { sanitize: true } ) ;
+	//return  marked( data, { highlight: function(code) { return require('highlight.js').highlightAuto(code).value ; } } ) ;
+	return  marked( data, { highlight: function(code) { return hljs.highlightAuto(code).value ; } } ) ;
+}
 function renderHTML( id, data64 ) {
 	document.getElementById(id).innerHTML = "" ;
 	data = Base64.decode(data64) ;
-	document.getElementById(id).innerHTML = marked( data, { sanitize: true } ) ;
-	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\(title:.*\).*$/m ))!=null ) {
-		document.title = res[0].replace( /.*\(title:/, "" ).replace( /\).*/, "" ) ;
+	document.getElementById(id).innerHTML = doMarked( data ) ;
+	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*title:.*\).*$/m ))!=null ) {
+		document.title = res[0].replace( /.*\([ ]*title:/, "" ).replace( /[ ]*\).*$/, "" ) ;
 	}
+	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*style:.*\).*$/m ))!=null ) {
+		switch_style( res[0].replace( /.*\([ ]*style:[ ]*/, "" ).replace( /[ ]*\).*$/, "" ) ) ;
+	}
+	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*readonly[ ]*\).*$/m ))!=null ) { page.readOnly = true ; }
 }
 function doLoad( name ) {
 	reg = new RegExp( '^' + separator  ) ;
@@ -281,18 +291,30 @@ function doLoad( name ) {
 		} 
 	) ;
 }
+var style_list = [ "original", "github", "gitlab" ] ;
 function switch_style(css_title) {
 	if( css_title == null ) {
-		if( style == "original" ) { style = "github" ; }
+		var n = style_list.indexOf( style ) + 1 ;
+		if( n>=style_list.length ) { n = 0 ; }
+		style = style_list[n] ;
+		/*if( style == "original" ) { style = "github" ; }
 		else if( style == "github" ) { style = "gitlab" ; }
-		else if( style == "gitlab" ) { style = "original" ; }
-	} else { style = css_title ; }
+		else { style = "original" ; }*/
+		n = null ;
+	} else {
+		if( style_list.indexOf(css_title)==-1 ) {
+			loadjscssfile(css_title+".css", "css", css_title) ;
+			style_list.push(css_title) ;
+		} 
+		if( style_list.indexOf(css_title)==-1 ) { return ; }
+		style = css_title ; 
+	}
 var i, link_tag ;
 
  for (i = 0, link_tag = document.getElementsByTagName("style") ;
     i < link_tag.length ; i++ ) {
     if( link_tag[i].title ) {
-      link_tag[i].disabled = true ;
+      if( link_tag[i].title!="ttxt" ) { link_tag[i].disabled = true ; }
       if (link_tag[i].title == style) {
         link_tag[i].disabled = false ;
       }
@@ -309,6 +331,15 @@ var i, link_tag ;
       }
     }
   }
+ for (i = 0, link_tag = document.getElementsByTagName("style") ;
+    i < link_tag.length ; i++ ) {
+    if( link_tag[i].title ) {
+      if (link_tag[i].title == "ttxt") {
+        link_tag[i].disabled = false ;
+      }
+    }
+  }
+  link_tag = null ;
   sessionStorage.setItem( "MDStyle", style ) ;
 }
 function init() {
@@ -317,23 +348,30 @@ function init() {
 	} else {
 		doLoad( location.hash ) ;
 	}
+	var Params = getParams() ;
+	if( Params.style ) { switch_style( Params.style ) ; }
+	else { switch_style( "original" ) ; }
+	Params = null ;
 }
 function switchToEditor() {
 	if( page.readOnly ) { return ; }
+	pct = document.documentElement.scrollTop/ document.documentElement.scrollHeight ;
 	document.getElementById("content").style.display = 'none' ;
 	document.getElementById('ttxt').value = '' ;
 	document.getElementById('ttxt').value = Base64.decode( page.data ) ;
 	document.getElementById("editor").style.display = 'block' ;
-	document.getElementById('ttxt').style.scrollTop = 0 ;
-	document.getElementById('ttxt').style.height = document.getElementById("editor").offsetHeight ;
-	document.getElementById('ttxt').focus() ;
-	document.getElementById('ttxt').click();
+	//document.getElementById('ttxt').focus() ;
+	//setCaretToPos(document.getElementById('ttxt'),0);
+	force_scroll( document.getElementById('ttxt'), pct ) ;
+	document.getElementById('ttxt').click() ;
 }
 function switchToContent() {
+	pct = document.documentElement.scrollTop/ document.documentElement.scrollHeight ;
 	page.data = Base64.encode( document.getElementById('ttxt').value ) ;
 	renderHTML( "content", page.data ) ;
 	document.getElementById("editor").style.display = 'none' ;
 	document.getElementById("content").style.display = 'block' ;
+	force_scroll( document.documentElement, pct ) ;
 }
 function doSave() { 
 	if( page!=null ) {
@@ -380,22 +418,62 @@ function doPass() {
 	}
 }
 function doScroll(el) {
-	el.style.height = document.getElementById("editor").scrollHeight ;
 	pos = el.scrollTop/el.scrollHeight ;
-//	console.log( el.scrollTop/el.scrollHeight ) ;
-	document.getElementById('editor').scrollTop = parseInt(pos * document.getElementById('editor').scrollHeight ) ;
+	force_scroll( document.documentElement, pos ) ;
 }
 </script>
-<style type="text/css">
+<style type="text/css" title="ttxt">
 #content {
   padding: 3%;
 }
+
 #ttxt {
+  position: fixed;
+  display: inline-block;
+  left: 3px;
+  top: 0px;
   resize: vertical;
+  height: 100%;
+  width: 49%;
 }
+
+html, body, #editor {
+  margin: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+textarea, #editor div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+textarea {
+  border: none;
+  border-right: 1px solid #ccc;
+  background-color: #f6f6f6;
+  font-size: 14px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
+}
+
+#editor {
+  position: relative;
+  left: 50%;
+}
+
 code {
   color: #f66;
-  overflow: visible;
+  overflow-x: visible;
+  overflow-wrap: break-word;
+}
+pre {
+  overflow-x: auto;
   overflow-wrap: break-word;
 }
 </style>
@@ -418,12 +496,12 @@ new Vue({
   },
   computed: {
     compiledMarkdown: function () {
-      return marked(this.input, { sanitize: true } )
+      return doMarked( this.input )
     }
   },
   methods: {
     update: _.debounce(function (e) {
-      document.getElementById('ttxt').style.height = document.getElementById("editor").scrollHeight + 'px' ;
+      //document.getElementById('ttxt').style.height = document.getElementById("editor").scrollHeight + 'px' ;
       this.input = e.target.value
     }, 300)
   }
@@ -450,4 +528,3 @@ window.document.getElementById("ttxt").addEventListener("scroll", function (even
 
 </body>
 </html>
-
