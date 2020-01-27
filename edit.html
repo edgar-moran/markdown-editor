@@ -215,6 +215,13 @@ function doJump( ev ) {
 		return false ;
 	}
 }
+function doHelp() {
+  swal({
+  width: 600,
+  title: 'Help page?',
+  html: '<ul style="text-align:left;"><li>To switch from page viewer to page editor, just double-click</li><li>To protect the page with password ALT+p</li><li>To save the page press ALT+o</li><li>To switch back to the viewer press escape key</li></ul>'
+  });
+}
 function doPass() {
 	password = window.prompt( "Protected mode. Please enter the password:", password ) ;
 	if( password == null ) { password = "" ; }
@@ -289,7 +296,7 @@ pre {
 <body onLoad="init();">
 
 <div id="editor" style="display: none;">
-  <textarea id="ttxt" v-on:click="update" @keyup.alt.80="doPass();" @keyup.alt.83="doSave();" @keyup.alt.84="switch_style(null);" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
+  <textarea id="ttxt" v-on:click="update" @keyup.alt.f1="doHelp();" @keyup.alt.80="doPass();" @keyup.alt.83="doSave();" @keyup.alt.84="switch_style(null);" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
   <div v-html="compiledMarkdown"></div>
 </div>
 
