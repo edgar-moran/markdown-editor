@@ -8,6 +8,7 @@ sed  '/INCLUDE_START/,$d' ${main_file}
 
 echo -n '<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,' ; base64 favicon.ico|tr -d '\n' ; echo '">'
 echo -n '<style type="text/css" title="original">' ; cat css/style.min.css | tr -d '\n' ; echo '</style>'
+echo -n '<style type="text/css" title="normalize">' ; cat css/normalize.min.css | tr -d '\n' ; echo '</style>'
 echo -n '<style type="text/css" title="github">' ; cat css/github.min.css | tr -d '\n' ; echo '</style>'
 echo -n '<style type="text/css" title="gitlab">' ; cat css/gitlab.min.css | tr -d '\n' ; echo '</style>'
 echo -n '<style type="text/css">' ; cat css/highlight.min.css | tr -d '\n' ; echo '</style>'

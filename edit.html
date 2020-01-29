@@ -8,6 +8,7 @@
 <!-- INCLUDE_START -->
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="stylesheet" title="original" href="css/style.css">
+<link rel="alternate stylesheet" title="normalize" href="css/normalize.css">
 <link rel="alternate stylesheet" title="github" href="css/github.css">
 <link rel="alternate stylesheet" title="gitlab" href="css/gitlab.css">
 <link rel="stylesheet" href="css/highlight.css">
@@ -126,7 +127,7 @@ var i, link_tag ;
  for (i = 0, link_tag = document.getElementsByTagName("style") ;
     i < link_tag.length ; i++ ) {
     if( link_tag[i].title ) {
-      if( link_tag[i].title!="ttxt" ) { link_tag[i].disabled = true ; }
+      if( link_tag[i].title == "ttxt" ) { link_tag[i].disabled = false ; } else { link_tag[i].disabled = true ; } 
       if (link_tag[i].title == style) {
         link_tag[i].disabled = false ;
       }
@@ -142,7 +143,7 @@ var i, link_tag ;
         link_tag[i].disabled = false ;
       }
     }
-  }
+  }/*
  for (i = 0, link_tag = document.getElementsByTagName("style") ;
     i < link_tag.length ; i++ ) {
     if( link_tag[i].title ) {
@@ -150,7 +151,7 @@ var i, link_tag ;
         link_tag[i].disabled = false ;
       }
     }
-  }
+  }*/
   link_tag = null ;
   sessionStorage.setItem( "MDStyle", style ) ;
 }
@@ -253,12 +254,12 @@ function doScroll(el) {
   resize: vertical;
   height: 100%;
   width: 49%;
-}
-html, body, #editor {
-  margin: 0;
-  height: 100%;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #333;
+  border: none;
+  border-right: 1px solid #ccc;
+  background-color: #f6f6f6;
+  font-size: 14px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
 }
 textarea, #editor div {
   display: inline-block;
@@ -268,20 +269,11 @@ textarea, #editor div {
   box-sizing: border-box;
   padding: 0 20px;
 }
-textarea {
-  border: none;
-  border-right: 1px solid #ccc;
-  background-color: #f6f6f6;
-  font-size: 14px;
-  font-family: 'Monaco', courier, monospace;
-  padding: 20px;
-}
 #editor {
   position: relative;
   left: 50%;
 }
 code {
-  color: #f66;
   overflow-x: visible;
   overflow-wrap: break-word;
 }
