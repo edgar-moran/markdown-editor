@@ -221,6 +221,8 @@ var password = "" ;
 var salt = "" ;
 var style = "original" ;
 var separator = "#/" ;
+var style_list = [ "original", "github", "gitlab" ] ;
+var highlightjs = false ;
 var page = {
 	name: ""
 	, pathname: ""
@@ -234,7 +236,11 @@ var page = {
 function doMarked( data ) {
 	//return  marked( data, { sanitize: true } ) ;
 	//return  marked( data, { highlight: function(code) { return require('highlight.js').highlightAuto(code).value ; } } ) ;
-	return  marked( data.replace(/__([^_]*)__/gm, '<u>$1</u>'), { highlight: function(code) { return hljs.highlightAuto(code).value ; } } ) ;
+	if( highlightjs ) {
+		return  marked( data.replace(/__([^_]*)__/gm, '<u>$1</u>'), { highlight: function(code) { return hljs.highlightAuto(code).value ; } } ) ;
+	} else {
+		return  marked( data.replace(/__([^_]*)__/gm, '<u>$1</u>') ) ;
+	}
 }
 function renderHTML( id, data64 ) {
 	document.getElementById(id).innerHTML = "" ;
@@ -291,7 +297,6 @@ function doLoad( name ) {
 		} 
 	) ;
 }
-var style_list = [ "original", "github", "gitlab" ] ;
 function switch_style(css_title) {
 	if( css_title == null ) {
 		var n = style_list.indexOf( style ) + 1 ;
@@ -433,7 +438,6 @@ function doScroll(el) {
 #content {
   padding: 3%;
 }
-
 #ttxt {
   position: fixed;
   display: inline-block;
@@ -443,14 +447,12 @@ function doScroll(el) {
   height: 100%;
   width: 49%;
 }
-
 html, body, #editor {
   margin: 0;
   height: 100%;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   color: #333;
 }
-
 textarea, #editor div {
   display: inline-block;
   width: 49%;
@@ -459,7 +461,6 @@ textarea, #editor div {
   box-sizing: border-box;
   padding: 0 20px;
 }
-
 textarea {
   border: none;
   border-right: 1px solid #ccc;
@@ -468,12 +469,10 @@ textarea {
   font-family: 'Monaco', courier, monospace;
   padding: 20px;
 }
-
 #editor {
   position: relative;
   left: 50%;
 }
-
 code {
   color: #f66;
   overflow-x: visible;
