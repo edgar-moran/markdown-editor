@@ -234,7 +234,7 @@ var page = {
 function doMarked( data ) {
 	//return  marked( data, { sanitize: true } ) ;
 	//return  marked( data, { highlight: function(code) { return require('highlight.js').highlightAuto(code).value ; } } ) ;
-	return  marked( data, { highlight: function(code) { return hljs.highlightAuto(code).value ; } } ) ;
+	return  marked( data.replace(/__([^_]*)__/gm, '<u>$1</u>'), { highlight: function(code) { return hljs.highlightAuto(code).value ; } } ) ;
 }
 function renderHTML( id, data64 ) {
 	document.getElementById(id).innerHTML = "" ;
