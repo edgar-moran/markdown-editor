@@ -116,3 +116,6 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+p {
+	text-indent: 15px ;
+}
