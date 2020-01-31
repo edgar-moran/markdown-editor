@@ -16,6 +16,7 @@
 <script type="text/javascript" src="js/crc32.min.js"></script>
 <script type="text/javascript" src="js/vue.min.js"></script>
 <script type="text/javascript" src="js/marked.min.js"></script>
+<script type="text/javascript" src="js/showdown.min.js"></script>
 <script type="text/javascript" src="js/sweetalert2.all.min.js"></script>
 <script type="text/javascript" src="js/lodash.min.js"></script>
 <script type="text/javascript" src="js/highlight.min.js"></script>
@@ -31,6 +32,9 @@ var style = "original" ;
 var separator = "#/" ;
 var style_list = [ "original", "github", "gitlab" ] ;
 var highlightjs = true ;
+//var markdownEngine = "Marked" ;
+var markdownEngine = "Showdown" ;
+var backend = "edit.php" ;
 var page = {
 	name: ""
 	, pathname: ""
@@ -41,6 +45,10 @@ var page = {
 	, data: ""
 	, readOnly: false
 } ;
+function doShowdown( data ) {
+	var converter = new showdown.Converter({tables: true, strikethrough: true, parseImgDimensions: true, simplifiedAutoLink: true, excludeTrailingPunctuationFromURLs: true, tasklists: true, smoothLivePreview: true}) ;
+	return converter.makeHtml( data.replace(/__([^_]*)__/gm, '<u>$1</u>') ) ;
+}
 function doMarked( data ) {
 	//return  marked( data, { sanitize: true } ) ;
 	//return  marked( data, { highlight: function(code) { return require('highlight.js').highlightAuto(code).value ; } } ) ;
@@ -50,10 +58,14 @@ function doMarked( data ) {
 		return  marked( data.replace(/__([^_]*)__/gm, '<u>$1</u>') ) ;
 	}
 }
+function doMarkdown( data ) {
+	if( markdownEngine == "Showdown" ) { return doShowdown( data ) ; }
+	else { return doMarked( data ) ; }
+}
 function renderHTML( id, data64 ) {
 	document.getElementById(id).innerHTML = "" ;
 	data = Base64.decode(data64) ;
-	document.getElementById(id).innerHTML = doMarked( data ) ;
+	document.getElementById(id).innerHTML = doMarkdown( data ) ;
 	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*title:.*\).*$/m ))!=null ) {
 		document.title = res[0].replace( /.*\([ ]*title:/, "" ).replace( /[ ]*\).*$/, "" ) ;
 	}
@@ -193,7 +205,7 @@ function doSave() {
 		} else {
 			data = Base64.encode( "!PASS" + sjcl.encrypt( password, document.getElementById('ttxt').value ) ) ;
 		}
-		savePage( "edit.php"
+		savePage( backend
 			, page.name
 			, data
 			, function() { swal( 'Good job!', 'Everything is fine!', 'success' ) ; switchToContent() ; }
@@ -301,7 +313,7 @@ new Vue({
   },
   computed: {
     compiledMarkdown: function () {
-      return doMarked( this.input )
+      return doMarkdown( this.input )
     }
   },
   methods: {
