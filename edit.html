@@ -32,8 +32,8 @@ var style = "original" ;
 var highlightjs = true ;
 var markdownEngine = "Marked" ;
 //var markdownEngine = "Showdown" ;
-//var backend = "edit.php" ;
-var backend = "edit.gy" ;
+var backend = "edit.php" ;
+//var backend = "edit.gy" ;
 var page = {
 	name: ""
 	, pathname: ""
@@ -168,26 +168,16 @@ var i, link_tag ;
   link_tag = null ;
   sessionStorage.setItem( "MDStyle", style ) ;
 }
-function init() {
-	if( location.hash=="" ) { 
-		location.replace( location.href+"#/index.md" ) ; 
-	} else {
-		doLoad( location.hash ) ;
-	}
-	var Params = getParams() ;
-	if( Params.style ) { switch_style( Params.style ) ; }
-	else { switch_style( "original" ) ; }
-	Params = null ;
-}
 function switchToEditor() {
 	if( page.readOnly ) { return ; }
 	pct = document.documentElement.scrollTop/ document.documentElement.scrollHeight ;
 	document.getElementById("content").style.display = 'none' ;
 	document.getElementById('ttxt').value = '' ;
-	document.getElementById('ttxt').value = Base64.decode( page.data ) ;
+	data = Base64.decode( page.data ) ;
+	document.getElementById('ttxt').value = data ;
 	document.getElementById("editor").style.display = 'block' ;
-	//document.getElementById('ttxt').focus() ;
-	//setCaretToPos(document.getElementById('ttxt'),0);
+	n = Math.round( pct*data.length ) ;
+	textareaSelect( document.getElementById('ttxt'), n, n ) ;
 	force_scroll( document.getElementById('ttxt'), pct ) ;
 	document.getElementById('ttxt').click() ;
 }
@@ -254,6 +244,20 @@ function doScroll(el) {
 	pos = el.scrollTop/el.scrollHeight ;
 	force_scroll( document.documentElement, pos ) ;
 }
+function init() {
+	if( location.hash=="" ) { 
+		location.replace( location.href+"#/index.md" ) ; 
+	} else {
+		doLoad( location.hash ) ;
+	}
+	var Params = getParams() ;
+	if( Params.style ) { switch_style( Params.style ) ; }
+	else { switch_style( "original" ) ; }
+	if( Params.engine ) { markdownEngine = Params.engine ; }
+	if( Params.backend ) { backend = "edit." + Params.backend ; if( backend=="edit.groovy" ) { backend = "edit.gy" ; } }
+	
+	Params = null ;
+}
 </script>
 <style type="text/css" title="ttxt">
 #content {
@@ -300,7 +304,7 @@ pre {
 <body onLoad="init();">
 
 <div id="editor" style="display: none;">
-  <textarea id="ttxt" v-on:click="update" @keyup.alt.f1="doHelp();" @keyup.alt.80="doPass();" @keyup.alt.83="doSave();" @keyup.alt.84="switch_style(null);" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
+  <textarea id="ttxt" v-on:click="update" @keyup.alt.f1="doHelp();return false;" @keyup.alt.80="doPass();" @keyup.alt.83="doSave();" @keyup.alt.84="switch_style(null);" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
   <div v-html="compiledMarkdown"></div>
 </div>
 
