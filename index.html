@@ -219,14 +219,14 @@ b){var c={},d;for(d=0;d<b.length;d++)void 0!==a[b[d]]&&(c[b[d]]=a[b[d]]);return 
 
 <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
-var password = "" ;
-var salt = "" ;
-var style = "original" ;
 var separator = "#/" ;
 var style_list = [ "original", "github", "gitlab" ] ;
+var style = "original" ;
 var highlightjs = true ;
-//var markdownEngine = "Marked" ;
-var markdownEngine = "Showdown" ;
+var markdownEngine = "Marked" ;
+//var markdownEngine = "Showdown" ;
+//var backend = "edit.php" ;
+var backend = "edit.gy" ;
 var page = {
 	name: ""
 	, pathname: ""
@@ -237,6 +237,8 @@ var page = {
 	, data: ""
 	, readOnly: false
 } ;
+var password = "" ;
+var salt = "" ;
 function doShowdown( data ) {
 	var converter = new showdown.Converter({tables: true, strikethrough: true, parseImgDimensions: true, simplifiedAutoLink: true, excludeTrailingPunctuationFromURLs: true, tasklists: true, smoothLivePreview: true}) ;
 	return converter.makeHtml( data.replace(/__([^_]*)__/gm, '<u>$1</u>') ) ;
@@ -397,7 +399,7 @@ function doSave() {
 		} else {
 			data = Base64.encode( "!PASS" + sjcl.encrypt( password, document.getElementById('ttxt').value ) ) ;
 		}
-		savePage( "edit.php"
+		savePage( backend
 			, page.name
 			, data
 			, function() { swal( 'Good job!', 'Everything is fine!', 'success' ) ; switchToContent() ; }
