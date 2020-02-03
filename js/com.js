@@ -133,3 +133,21 @@ removejscssfile("somescript.js", "js") //remove all occurences of "somescript.js
 removejscssfile("somestyle.css", "css") //remove all occurences "somestyle.css" on page
 */
 
+function textareaSelect(el, start, end) {
+    el.focus();
+    if (el.setSelectionRange) { 
+        el.setSelectionRange(start, end);
+    } 
+    else { 
+        if(el.createTextRange) { 
+            var normalizedValue = el.value.replace(/\r\n/g, "\n");
+            start -= normalizedValue.slice(0, start).split("\n").length - 1;
+            end -= normalizedValue.slice(0, end).split("\n").length - 1;
+            range=el.createTextRange(); 
+            range.collapse(true);
+            range.moveEnd('character', end);
+            range.moveStart('character', start); 
+            range.select();
+        } 
+    }
+}
