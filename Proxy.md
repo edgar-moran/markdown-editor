@@ -54,6 +54,14 @@ Exemple à la FDJ:
  
 Cette configuration standard vaut pour la majorité des applications basées sur libcurl.
 
+## Configuration spécifique: yum
+
+Pour yum (package manager sur CentOS) les variables de définition du proxy sont (en minuscule):
+
+- **http_proxy**
+- **https_proxy**
+- **no_proxy**
+
 ## Proxy système Debian/Ubuntu
 
 Par défaut les systèmes Debian ne disposent pas de l'outil de mise à jour des autorités de certification.  
@@ -86,13 +94,17 @@ Enfin il faut exécuter la commande
 
 `update-ca-certificates`
 
-## Configuration spécifique: yum
+## Configuration spécifique: apk
 
-Pour yum les variables de définition du proxy sont (en minuscule):
+Pour apk (package manager sur Alpine), les variables de définition du proxy sont comme suit:
 
-- **http_proxy**
-- **https_proxy**
-- **no_proxy**
+```
+export HTTP_PROXY=http://proxyhost:proxyport
+export HTTPS_PROXY=http://proxyhost:proxyport
+export HTTP_PROXY_AUTH=basic:*:proxyuser:proxypass
+``
+
+> /!\ les variables **HTTP_PROXY** et **HTTPS_PROXY** ne __doivent__ pas contenir l'authentification, et la variable **HTTP_PROXY_AUTH** __doit__ être en majuscule !
 
 ## Configuration spécifique: curl
 
@@ -323,7 +335,7 @@ eJwBrWvm8LrUpr1gD+hP2FZlhKo=
 -----END CERTIFICATE-----
 ```
 
-## AC des autorité des certification FDJ
+## AC des autorité des certification FDJ d'Intégration
 
 ### AC FDJ Root
 
@@ -447,5 +459,104 @@ ZTnB+lEYGnvGbaU17noDwxHHowd7c2dsCgMC6//oJsZ6FjB6kBb3uavcN4O8RnCU
 E6m84Z7zUDxQLEId4PwLgcv+uPBNIXW827FEliMvRSAsKRo94zeoUEdlB5tRAgaB
 EwjkXNRoZSm2Wy+3VsJyepAcgOQVN/L+9xTJUsua3IAT/+RutHSePPOHrB+cYaT1
 Qw==
+-----END CERTIFICATE-----
+```
+
+
+## AC des autorité des certification FDJ de production
+
+### AC FDJ Root
+
+```
+-----BEGIN CERTIFICATE-----
+MIIE6zCCA9OgAwIBAgIBADANBgkqhkiG9w0BAQQFADCBvjELMAkGA1UEBhMCRlIx
+DzANBgNVBAgTBkZyYW5jZTEdMBsGA1UEBxMUQm91bG9nbmUtQmlsbGFuY291cnQx
+HjAcBgNVBAoTFUxhIEZyYW5jYWlzZSBEZXMgSmV1eDESMBAGA1UECxMJTEZESiBJ
+U0VDMSowKAYDVQQDEyFMYSBGcmFuY2Fpc2UgRGVzIEpldXggLSBBQyBSYWNpbmUx
+HzAdBgkqhkiG9w0BCQEWEHNlY29wZXJAbGZkai5jb20wHhcNMDUwMTE0MTc0MTUx
+WhcNMjUwMTA5MTc0MTUxWjCBvjELMAkGA1UEBhMCRlIxDzANBgNVBAgTBkZyYW5j
+ZTEdMBsGA1UEBxMUQm91bG9nbmUtQmlsbGFuY291cnQxHjAcBgNVBAoTFUxhIEZy
+YW5jYWlzZSBEZXMgSmV1eDESMBAGA1UECxMJTEZESiBJU0VDMSowKAYDVQQDEyFM
+YSBGcmFuY2Fpc2UgRGVzIEpldXggLSBBQyBSYWNpbmUxHzAdBgkqhkiG9w0BCQEW
+EHNlY29wZXJAbGZkai5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB
+AQC8+4eT7D+4wv0di+7F+37DuWLZaWb59cWF0nHb3lX72MsZosA5ZOIA7OEdWPYb
+nDHp9wCH1KqxotJ+LVVaGXUnwcHCWxVHHFC1ccf6j37VTD2Pw4C728o+CqYNRr/3
+cLZydF24BNz48O5eZsHuhSVd5kegorIEvO6sBWQ196JJ+S/Gi6WJ7I6lxUkctk1d
+FYmqwnmozXdckY+V6R1UF9a699y+JOo1Awor+AwqLRvk7ck4WUm0g6tqBPH1aGeK
+KX+AHMhpnYhCg2q3GzT0REJoyuPQ7VwHPEnGSk0EXX9h49ECggWg2mlPU5vWHr0f
+SNVE8+i3A+uf1sve7Qol2Sm3AgMBAAGjgfEwge4wDAYDVR0TBAUwAwEB/zALBgNV
+HQ8EBAMCAQYwagYDVR0fBGMwYTAuoCygKoYoaHR0cHM6Ly9jZXJ0cy5mZGpldXgu
+Y29tL2NhL3Jvb3QvY3JsLmNybDAvoC2gK4YpaHR0cHM6Ly9jZXJ0cy5wcm9kLmZk
+ai5mci9jYS9yb290L2NybC5jcmwwQgYJYIZIAYb4QgENBDUWM1RoaXMgY2VydGlm
+aWNhdGUgaXMgdXNlZCBmb3IgaXNzdWVpbmcgc3ViLUNBIGNlcnRzLjAhBglghkgB
+hvhCAQIEFBYSQGNydF9yb290X2Jhc2VfdXJsMA0GCSqGSIb3DQEBBAUAA4IBAQBr
+n/hEzAaDseKRLDmI4T0JqEbsHnb2ka9E2VrBiTOEUryjAMAb7CtZZej/xmwA5Vxj
+2a3wGbii3Kr/oALL/AYwwvbZe9Te+/YNhRz219MB3MY9IPYz67ASAnl74y5uWGSy
+36sQMYgsnQuwLYo0ebsv4BHIpS8o2h1hNPSaIyRQpsxXrCmLOsNDb/9A/2W/651J
+1p+Ec1y8yOiwoGUe2tgBNqyEsQgMkz9uIB5UWoVbe0T/Zp8T42elxJnZGM39r6dm
+ltoHT/nva5rpbSOcqO8i/BO8IjG2JTmdqZFXTe6y8tpn345mwL+Rip5ZXWrqtFcs
+FGmj0pWrlLFAI5EkjjmO
+-----END CERTIFICATE-----
+```
+
+## AC FDJ Server Intermediate
+
+```
+-----BEGIN CERTIFICATE-----
+MIIEaDCCA1CgAwIBAgIBBDANBgkqhkiG9w0BAQUFADCBvjELMAkGA1UEBhMCRlIx
+DzANBgNVBAgTBkZyYW5jZTEdMBsGA1UEBxMUQm91bG9nbmUtQmlsbGFuY291cnQx
+HjAcBgNVBAoTFUxhIEZyYW5jYWlzZSBEZXMgSmV1eDESMBAGA1UECxMJTEZESiBJ
+U0VDMSowKAYDVQQDEyFMYSBGcmFuY2Fpc2UgRGVzIEpldXggLSBBQyBSYWNpbmUx
+HzAdBgkqhkiG9w0BCQEWEHNlY29wZXJAbGZkai5jb20wHhcNMDUwMTE0MTc0NDQ1
+WhcNMjUwMTA5MTc0NDQ1WjCBvzELMAkGA1UEBhMCRlIxDzANBgNVBAgTBkZyYW5j
+ZTEdMBsGA1UEBxMUQm91bG9nbmUtQmlsbGFuY291cnQxHjAcBgNVBAoTFUxhIEZy
+YW5jYWlzZSBEZXMgSmV1eDESMBAGA1UECxMJTEZESiBJU0VDMSswKQYDVQQDEyJM
+YSBGcmFuY2Fpc2UgRGVzIEpldXggLSBBQyBTZXJ2ZXVyMR8wHQYJKoZIhvcNAQkB
+FhBzZWNvcGVyQGxmZGouY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDX
+DHbocc9uA7R9axJvSdCQNEdO3KXUfcMFLtnRlUoB2ncZO8tBkW6/yh3tTEz1bLkJ
+qHjlOm8wdPmsYvEMLOMorM9rsXVcYpBj7dli0kaIyHZDxPRxzvufBWOSjCjDPss0
+iJqOnzwrje+dljKiij4oq49Yr3mqrtvaauwU3OPlmwIDAQABo4HxMIHuMAwGA1Ud
+EwQFMAMBAf8wCwYDVR0PBAQDAgEGMGoGA1UdHwRjMGEwLqAsoCqGKGh0dHBzOi8v
+Y2VydHMuZmRqZXV4LmNvbS9jYS9yb290L2NybC5jcmwwL6AtoCuGKWh0dHBzOi8v
+Y2VydHMucHJvZC5mZGouZnIvY2Evcm9vdC9jcmwuY3JsMEIGCWCGSAGG+EIBDQQ1
+FjNUaGlzIGNlcnRpZmljYXRlIGlzIHVzZWQgZm9yIGlzc3VlaW5nIHN1Yi1DQSBj
+ZXJ0cy4wIQYJYIZIAYb4QgECBBQWEkBjcnRfcm9vdF9iYXNlX3VybDANBgkqhkiG
+9w0BAQUFAAOCAQEAZyucy4/cnylkCo8v4RpB8oevFDlxVpU4t+evLlGodq8zIFI5
+4mTPnzBTXFyx2WIwdE18R8S4aN/VA7SFPCsteGoDzOpY4P4+CQCWNN0d/dJ7rwRA
+8fyP7lJbQat0eBs8m1EVQkN6x/az/HqE4ZNOvebVISO7GUdXE7zxBqc5HcM2JTbc
+QsnsS5ZaKmBL5DEm3oL0bVt3mSYoYNO0cfMnuw29LiK33cEATJk6U3y7OB60dwV0
+EvZTCW2YD077u7MUWvWBkY+Nd7ophxG85W2CqAz6D9cTgZohFXZe9SqCgVfWyoDc
+MuWgfVWiuffqPwVCIHameS6V4pHRckFOQ09vlQ==
+-----END CERTIFICATE-----
+```
+
+## AC FDJ Client Intermediate
+
+```
+-----BEGIN CERTIFICATE-----
+MIIEazCCA1OgAwIBAgIBAjANBgkqhkiG9w0BAQUFADCBvjELMAkGA1UEBhMCRlIx
+DzANBgNVBAgTBkZyYW5jZTEdMBsGA1UEBxMUQm91bG9nbmUtQmlsbGFuY291cnQx
+HjAcBgNVBAoTFUxhIEZyYW5jYWlzZSBEZXMgSmV1eDESMBAGA1UECxMJTEZESiBJ
+U0VDMSowKAYDVQQDEyFMYSBGcmFuY2Fpc2UgRGVzIEpldXggLSBBQyBSYWNpbmUx
+HzAdBgkqhkiG9w0BCQEWEHNlY29wZXJAbGZkai5jb20wHhcNMDUwMTE0MTc0MzQz
+WhcNMjUwMTA5MTc0MzQzWjCBwjELMAkGA1UEBhMCRlIxDzANBgNVBAgTBkZyYW5j
+ZTEdMBsGA1UEBxMUQm91bG9nbmUtQmlsbGFuY291cnQxHjAcBgNVBAoTFUxhIEZy
+YW5jYWlzZSBEZXMgSmV1eDESMBAGA1UECxMJTEZESiBJU0VDMS4wLAYDVQQDEyVM
+YSBGcmFuY2Fpc2UgRGVzIEpldXggLSBBQyBBdXRoQ2xpZW50MR8wHQYJKoZIhvcN
+AQkBFhBzZWNvcGVyQGxmZGouY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKB
+gQC1+xDeu3wcQT6xOhyOcU/673ZVbk/I+oIsaFxUvKeO811fH0mh5/8obqFJQzwT
+t8hewZHbWBR+YK9j2CAWIXpfJTR44DJCYYWATvj9Mf8eebg8sqpuUmDuYkTKli2k
+iocNj537gU9syiBrKX+HiulVtv1bSdaRWsmJeL7sLCXwvQIDAQABo4HxMIHuMAwG
+A1UdEwQFMAMBAf8wCwYDVR0PBAQDAgEGMGoGA1UdHwRjMGEwLqAsoCqGKGh0dHBz
+Oi8vY2VydHMuZmRqZXV4LmNvbS9jYS9yb290L2NybC5jcmwwL6AtoCuGKWh0dHBz
+Oi8vY2VydHMucHJvZC5mZGouZnIvY2Evcm9vdC9jcmwuY3JsMEIGCWCGSAGG+EIB
+DQQ1FjNUaGlzIGNlcnRpZmljYXRlIGlzIHVzZWQgZm9yIGlzc3VlaW5nIHN1Yi1D
+QSBjZXJ0cy4wIQYJYIZIAYb4QgECBBQWEkBjcnRfcm9vdF9iYXNlX3VybDANBgkq
+hkiG9w0BAQUFAAOCAQEAktH6YmJc1B3I2S+kM5/Hex8ezVQV4Gy3uCR7pXWG7lvX
+92lHOAQUxJROn1S3CwVSvMSxrzLFCbCV8o9wYNudX9eeCL72TPkKNWnOrz1ljHyx
+zmUD0wvlAbX5HZYnL1h1YakItpf53dDvPVIeKBnSc7XAqjdARIDVH7JRomJgU9qM
+IXEViY6XRogskvxxKVPUekeUypwwLUN6JTu+xS9Z/VbZpR+tL7ou2iPE8HL1DPGW
+jlzF0JQRnUFL2z2efn+42T3Eivo6+wzv5XDGtk7brVcXP4AYb1VaFzz7PpmASFQ1
+dbwxXojPrsYKXvXIf8Jbc7tQBCLVrVBDHsNExKvBCw==
 -----END CERTIFICATE-----
 ```
