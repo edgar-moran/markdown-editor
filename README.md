@@ -6,6 +6,8 @@ This markdown-editor is a 99% client-side javascript viewer and editor for markd
 
 Why 1% missing. Because when you finished to edit your document you can upload it directly to your web server.
 
+It can easily be used to power client-side Javascript Web site. Jump to the [demo](https://cyd01.github.io/markdown-editor/#/README.md).
+
 ---
 
 ## How to compile ?
