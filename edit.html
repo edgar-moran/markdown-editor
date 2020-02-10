@@ -203,7 +203,9 @@ function doSave() {
 }
 function doHash( h, t ) {
 	t = t || true ;
-	if( !h.match( /^#\// ) ) { h = "#/" + h ; }
+	reg = new RegExp( '^' + separator  ) ;
+	if( !h.match( reg ) ) { h = separator + h ; }
+	reg = null ;
 	location.assign( page.script + h ) ;
 	location.reload( t ) ;
 }
@@ -251,7 +253,7 @@ function doScroll(el) {
 }
 function init() {
 	if( location.hash=="" ) { 
-		location.replace( location.href+"#/index.md" ) ; 
+		location.replace( location.href + separator + "index.md" ) ; 
 	} else {
 		doLoad( location.hash ) ;
 	}
