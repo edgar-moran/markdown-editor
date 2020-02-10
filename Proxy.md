@@ -1,6 +1,6 @@
 
-
 [//]: # (title:Gestion des proxy)
+[//]: # (style:github)
 
 # Gestion des proxy
 
@@ -102,7 +102,7 @@ Pour apk (package manager sur Alpine), les variables de définition du proxy son
 export HTTP_PROXY=http://proxyhost:proxyport
 export HTTPS_PROXY=http://proxyhost:proxyport
 export HTTP_PROXY_AUTH=basic:*:proxyuser:proxypass
-``
+```
 
 > /!\ les variables **HTTP_PROXY** et **HTTPS_PROXY** ne __doivent__ pas contenir l'authentification, et la variable **HTTP_PROXY_AUTH** __doit__ être en majuscule !
 

@@ -123,9 +123,6 @@ function switch_style(css_title) {
 		var n = style_list.indexOf( style ) + 1 ;
 		if( n>=style_list.length ) { n = 0 ; }
 		style = style_list[n] ;
-		/*if( style == "original" ) { style = "github" ; }
-		else if( style == "github" ) { style = "gitlab" ; }
-		else { style = "original" ; }*/
 		n = null ;
 	} else {
 		if( style_list.indexOf(css_title)==-1 ) {
@@ -200,21 +197,29 @@ function doSave() {
 			, page.name
 			, data
 			, function() { swal( 'Good job!', 'Everything is fine!', 'success' ) ; switchToContent() ; }
-			, function() { swal( "Oops", "Something went wrong!", "error" ) ; } 
+			, function() { swal( "Oops", "Something went wrong while saving page<br/><u>"+page.name+"</u> !", "error" ) ; } 
 		) ; 
 	}
 }
-function doHash( h ) {
+function doHash( h, t ) {
+	t = t || true ;
 	if( !h.match( /^#\// ) ) { h = "#/" + h ; }
 	location.assign( page.script + h ) ;
-	location.reload( true ) ;
+	location.reload( t ) ;
 }
 function doJump( ev ) {
 	url = ev.hash ;
 	if( url == "" ) {
 		url = ev.attributes[0].nodeValue ;
-		if( !url.match( /^http[s]?:\/\// ) ) { 
-			url = page.path + '/' + url ;
+		if( !url.match( /^http[s]?:\/\// ) ) {
+			if( url.match( /\.md$/ ) ) {
+				ev.removeAttribute('href');
+				url = page.script + separator + url ;
+				window.open(url, "_self", "", true );
+				return true ;
+			} else {
+				url = page.path + '/' + url ;
+			}
 			url = url.replace( /\/\//g, "/" ) ;
 		}
 		location.assign( url ) ;
@@ -298,6 +303,7 @@ pre {
   overflow-x: auto;
   overflow-wrap: break-word;
 }
+//a { pointer-events:none ; }
 </style>
 
 </head>
