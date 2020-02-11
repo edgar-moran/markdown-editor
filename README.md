@@ -42,3 +42,4 @@ Use Markdown comments to define special page settings:
 | ----------------------------------- | --------------------- |
 | `[//]: # (title:This is the title)` | Define the page title |
 | `[//]: # (style:css/united)`        | Define the page style |
+| `[//]: # (readonly)`                | Force read only page  |

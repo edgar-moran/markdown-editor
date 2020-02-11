@@ -66,7 +66,11 @@ function doMarkdown( data ) {
 function renderHTML( id, data64 ) {
 	document.getElementById(id).innerHTML = "" ;
 	data = Base64.decode(data64) ;
-	document.getElementById(id).innerHTML = doMarkdown( data ) ;
+	if( page.name.match( /\.md$/ ) ) {
+		document.getElementById(id).innerHTML = doMarkdown( data ) ;
+	} else {
+		document.getElementById(id).innerHTML = data ;
+	}
 	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*title:.*\).*$/m ))!=null ) {
 		document.title = res[0].replace( /.*\([ ]*title:/, "" ).replace( /[ ]*\).*$/, "" ) ;
 	}
