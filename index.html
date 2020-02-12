@@ -248,7 +248,6 @@ var highlightjs = true ;
 var engine = "Marked" ;
 //var engine = "Showdown" ;
 var backend = "edit.php" ;
-//var backend = "edit.gy" ;
 var page = {
 	name: ""
 	, pathname: ""
@@ -482,7 +481,11 @@ function init() {
 	if( Params.style ) { switch_style( Params.style ) ; }
 	else { switch_style( "original" ) ; }
 	if( Params.engine ) { engine = Params.engine ; }
-	if( Params.backend ) { backend = "edit." + Params.backend ; if( backend=="edit.groovy" ) { backend = "edit.gy" ; } }
+	if( Params.backend ) { 
+		backend = Params.backend ;
+		if( !backend.match( /\./ ) ) {  backend = "edit." + Params.backend ; }
+		if( backend=="edit.groovy" ) { backend = "edit.gy" ; } 
+	}
 	
 	Params = null ;
 }
