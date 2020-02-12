@@ -245,8 +245,8 @@ var separator = "#/" ;
 var style_list = [ "original", "github", "gitlab" ] ;
 var style = "original" ;
 var highlightjs = true ;
-var markdownEngine = "Marked" ;
-//var markdownEngine = "Showdown" ;
+var engine = "Marked" ;
+//var engine = "Showdown" ;
 var backend = "edit.php" ;
 //var backend = "edit.gy" ;
 var page = {
@@ -275,7 +275,9 @@ function doMarked( data ) {
 	}
 }
 function doMarkdown( data ) {
-	if( markdownEngine == "Showdown" ) { return doShowdown( data ) ; }
+	if( engine == "Showdown" ) { return doShowdown( data ) ; }
+	else if( engine == "raw" ) { return data ; }
+	else if( engine == "base64" ) { return Base64.encode( data ) ; }
 	else { return doMarked( data ) ; }
 }
 function renderHTML( id, data64 ) {
@@ -479,7 +481,7 @@ function init() {
 	var Params = getParams() ;
 	if( Params.style ) { switch_style( Params.style ) ; }
 	else { switch_style( "original" ) ; }
-	if( Params.engine ) { markdownEngine = Params.engine ; }
+	if( Params.engine ) { engine = Params.engine ; }
 	if( Params.backend ) { backend = "edit." + Params.backend ; if( backend=="edit.groovy" ) { backend = "edit.gy" ; } }
 	
 	Params = null ;
