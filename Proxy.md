@@ -62,6 +62,12 @@ Pour yum (package manager sur CentOS) les variables de définition du proxy sont
 - **https_proxy**
 - **no_proxy**
 
+Pour bypasser le contrôle des certificats il faut ajouter la ligne
+
+    sslverify=false
+
+au fichier **/etc/yum.conf**.
+
 ## Proxy système Debian/Ubuntu
 
 Par défaut les systèmes Debian ne disposent pas de l'outil de mise à jour des autorités de certification.  
