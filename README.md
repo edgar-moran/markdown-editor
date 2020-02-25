@@ -26,7 +26,7 @@ It produces a new file **install.php**. Just upload it on your web site and call
 
 ## How does it work ?
 
-- To switch from page viewer to page editor, just **double-click**
+- To switch from page viewer to page editor, just **triple-click**
 - To protect the page with password **ALT+p**
 - To save the page press **ALT+o**
 - To swtich between embedded style sheet press **ATL+t**
