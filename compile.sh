@@ -29,6 +29,7 @@ sed  '1,/INCLUDE_END/d' ${main_file}
 } > index.html
 
 {
+
 echo '<?php'
 
 echo '/* Markdown Editor Installer */' ;
@@ -48,4 +49,5 @@ echo 'if( !file_exists("img") ) { mkdir("img") ; }'
 echo 'header("Location: index.html");'
 
 echo '?>'
+
 } > install.php
