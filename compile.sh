@@ -12,6 +12,7 @@ echo -n '<style type="text/css" title="normalize">' ; cat css/normalize.min.css 
 echo -n '<style type="text/css" title="github">' ; cat css/github.min.css | tr -d '\n' ; echo '</style>'
 echo -n '<style type="text/css" title="gitlab">' ; cat css/gitlab.min.css | tr -d '\n' ; echo '</style>'
 echo -n '<style type="text/css">' ; cat css/highlight.min.css | tr -d '\n' ; echo '</style>'
+echo -n '<style type="text/css">' ; cat css/menu.min.css | tr -d '\n' ; echo '</style>'
 
 echo -n '<script type="text/javascript">' ; cat js/base64.min.js | tr -d '\n' ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/crc32.min.js | tr -d '\n' ; echo '</script>'
@@ -29,7 +30,6 @@ sed  '1,/INCLUDE_END/d' ${main_file}
 } > index.html
 
 {
-
 echo '<?php'
 
 echo '/* Markdown Editor Installer */' ;
@@ -49,5 +49,4 @@ echo 'if( !file_exists("img") ) { mkdir("img") ; }'
 echo 'header("Location: index.html");'
 
 echo '?>'
-
 } > install.php

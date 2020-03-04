@@ -4,7 +4,6 @@ html, body, #editor {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   color: #333;
 }
-body { padding: 10px; }
 
 textarea, #editor div {
   display: inline-block;
