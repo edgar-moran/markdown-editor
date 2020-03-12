@@ -1,6 +1,5 @@
 
 [//]: # (title:Gestion des proxy)
-[//]: # (style:github)
 
 # Gestion des proxy
 

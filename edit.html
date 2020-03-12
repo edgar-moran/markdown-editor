@@ -51,8 +51,6 @@ function doShowdown( data ) {
 	return converter.makeHtml( data.replace(/__([^_]*)__/gm, '<u>$1</u>') ) ;
 }
 function doMarked( data ) {
-	//return  marked( data, { sanitize: true } ) ;
-	//return  marked( data, { highlight: function(code) { return require('highlight.js').highlightAuto(code).value ; } } ) ;
 	if( highlightjs ) {
 		return  marked( data.replace(/__([^_]*)__/gm, '<u>$1</u>'), { highlight: function(code) { return hljs.highlightAuto(code).value ; } } ) ;
 	} else {
@@ -320,92 +318,7 @@ pre {
 </head>
 <body onLoad="init();">
 
-
-<!--[if lte IE 8]>
-          <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-old-ie-min.css">
-      <![endif]-->
-      <!--[if gt IE 8]><!-->
-          <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-min.css">
-      <!--<![endif]-->
-      
-      <style>
-      .custom-wrapper {
-          background-color: #ffd390;
-          margin-bottom: 1em;
-          -webkit-font-smoothing: antialiased;
-          height: 2.1em;
-          overflow: hidden;
-          -webkit-transition: height 0.5s;
-          -moz-transition: height 0.5s;
-          -ms-transition: height 0.5s;
-          transition: height 0.5s;
-      }
-      
-      .custom-wrapper.open {
-          height: 14em;
-      }
-      
-      .custom-menu-3 {
-          text-align: right;
-      }
-      
-      .custom-toggle {
-          width: 34px;
-          height: 34px;
-          position: absolute;
-          top: 0;
-          right: 0;
-          display: none;
-      }
-      
-      .custom-toggle .bar {
-          background-color: #777;
-          display: block;
-          width: 20px;
-          height: 2px;
-          border-radius: 100px;
-          position: absolute;
-          top: 18px;
-          right: 7px;
-          -webkit-transition: all 0.5s;
-          -moz-transition: all 0.5s;
-          -ms-transition: all 0.5s;
-          transition: all 0.5s;
-      }
-      
-      .custom-toggle .bar:first-child {
-          -webkit-transform: translateY(-6px);
-          -moz-transform: translateY(-6px);
-          -ms-transform: translateY(-6px);
-          transform: translateY(-6px);
-      }
-      
-      .custom-toggle.x .bar {
-          -webkit-transform: rotate(45deg);
-          -moz-transform: rotate(45deg);
-          -ms-transform: rotate(45deg);
-          transform: rotate(45deg);
-      }
-      
-      .custom-toggle.x .bar:first-child {
-          -webkit-transform: rotate(-45deg);
-          -moz-transform: rotate(-45deg);
-          -ms-transform: rotate(-45deg);
-          transform: rotate(-45deg);
-      }
-      
-      @media (max-width: 47.999em) {
-      
-          .custom-menu-3 {
-              text-align: left;
-          }
-      
-          .custom-toggle {
-              display: block;
-          }
-      
-      }
-      </style>
+<div id="divmenu">
       <div class="custom-wrapper pure-g" id="menu">
           <div class="pure-u-1 pure-u-md-1-3">
               <div class="pure-menu">
@@ -416,8 +329,8 @@ pre {
           <div class="pure-u-1 pure-u-md-1-3">
               <div class="pure-menu pure-menu-horizontal custom-can-transform">
                   <ul class="pure-menu-list">
-                      <li class="pure-menu-item"><a href="#/Proxy.md" class="pure-menu-link">Home</a></li>
-                      <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
+                      <li class="pure-menu-item"><a href="#/Proxy.md" class="pure-menu-link">Proxy</a></li>
+                      <li class="pure-menu-item"><a href="#/README.md" class="pure-menu-link">README</a></li>
                       <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
                   </ul>
               </div>
@@ -478,9 +391,8 @@ pre {
       
       window.addEventListener(WINDOW_CHANGE_EVENT, closeMenu);
       })(this, this.document);
-      
       </script>
-
+</div>
 
 <div id="editor" style="display: none;">
   <textarea id="ttxt" v-on:click="update" @keyup.alt.f1="doHelp();return false;" @keyup.alt.80="doPass();" @keyup.alt.83="doSave();" @keyup.alt.84="switch_style(null);" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
