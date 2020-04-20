@@ -86,7 +86,7 @@ function savePage(url, page, data, fctok,fctko) {
 		if(xhr.readyState == 1) {
 		} else if(xhr.readyState == 4) {
 			if( xhr.status == 200 ) {
-				if( xhr.responseText.match( /^Page .* updated$/ ) ) {
+				if( xhr.responseText.match( /^Page .* updated/ ) ) {
 					fctok() ;
 				} else {
 					fctko() ;
