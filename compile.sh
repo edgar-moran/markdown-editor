@@ -14,6 +14,7 @@ echo -n '<style type="text/css" title="gitlab">' ; cat css/gitlab.min.css | tr -
 echo -n '<style type="text/css">' ; cat css/highlight.min.css | tr -d '\n' ; echo '</style>'
 #echo -n '<style type="text/css">' ; cat css/menu.min.css | tr -d '\n' ; echo '</style>'
 
+echo -n '<!--[if IE]><!--><script type="text/javascript">' ; cat js/promise.min.js | tr -d '\n' ; echo '</script><!--<![endif]-->'
 echo -n '<script type="text/javascript">' ; cat js/base64.min.js | tr -d '\n' ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/crc32.min.js | tr -d '\n' ; echo '</script>'
 echo -n '<script type="text/javascript">' ; cat js/vue.min.js | tr -d '\n' ; echo '</script>'

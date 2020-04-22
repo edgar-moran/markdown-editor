@@ -7,12 +7,15 @@
 <title>☢</title>
 <!-- INCLUDE_START -->
 <link rel="icon" type="image/x-icon" href="favicon.ico">
+
 <link rel="stylesheet" title="original" href="css/style.css">
 <link rel="alternate stylesheet" title="normalize" href="css/normalize.css">
 <link rel="alternate stylesheet" title="github" href="css/github.css">
 <link rel="alternate stylesheet" title="gitlab" href="css/gitlab.css">
 <link rel="stylesheet" href="css/highlight.css">
 <!--<link rel="stylesheet" href="css/menu.css">-->
+
+<!--[if IE]><!--><script type="text/javascript" src="js/promise.min.js"></script><!--<![endif]-->
 <script type="text/javascript" src="js/base64.min.js"></script>
 <script type="text/javascript" src="js/crc32.min.js"></script>
 <script type="text/javascript" src="js/vue.min.js"></script>
@@ -79,6 +82,12 @@ function renderHTML( id, data64 ) {
 	}
 	if( (res = data.match( /^[ ]*\[\/\/\]:[ ]*#[ ]*\([ ]*readonly[ ]*\).*$/m ))!=null ) { page.readOnly = true ; }
 }
+function doHTML( name, data ) {
+	page.data = data ;
+	page.name = name ;
+	document.title = name ;
+	renderHTML( "content", page.data ) ;
+}
 function doLoad( name ) {
 	reg = new RegExp( '^' + separator  ) ;
 	name = name.replace( reg, "" ) ;		//name = location.hash.replace( /^#\//, "" ) ;
@@ -106,9 +115,7 @@ function doLoad( name ) {
 				data = data.replace( /^!PASS/, "" ) ;
 				data = sjcl.decrypt( password, data ) ;
 			}
-			page.data = Base64.encode( data ) ;
-			document.title = page.name ;
-			renderHTML( "content", page.data ) ;
+			doHTML( name, Base64.encode( data ) ) ;
 		}
 		, function() { 
 			if( page.name.match( /\.md$/ ) ) {
@@ -256,12 +263,16 @@ function doScroll(el) {
 	force_scroll( document.documentElement, pos ) ;
 }
 function init() {
-	if( location.hash=="" ) { 
-		location.replace( location.href + separator + "index.md" ) ; 
-	} else {
-		doLoad( location.hash ) ;
-	}
 	var Params = getParams() ;
+	if( Params.data ) {
+		doHTML( '_internal.md', Params.data ) ;
+	} else {
+		if( location.hash=="" ) { 
+			location.replace( location.href + separator + "index.md" ) ; 
+		} else {
+			doLoad( location.hash ) ;
+		}
+	}
 	if( Params.style ) { switch_style( Params.style ) ; }
 	else { switch_style( "original" ) ; }
 	if( Params.engine ) { engine = Params.engine ; }
