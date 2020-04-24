@@ -183,6 +183,7 @@ function switchToEditor() {
 	document.getElementById('ttxt').value = '' ;
 	data = Base64.decode( page.data ) ;
 	document.getElementById('ttxt').value = data ;
+	document.getElementById("editcss").style.display = 'none' ;
 	document.getElementById("editor").style.display = 'block' ;
 	n = Math.round( pct*data.length ) ;
 	textareaSelect( document.getElementById('ttxt'), n, n ) ;
@@ -194,8 +195,22 @@ function switchToContent() {
 	page.data = Base64.encode( document.getElementById('ttxt').value ) ;
 	renderHTML( "content", page.data ) ;
 	document.getElementById("editor").style.display = 'none' ;
+	document.getElementById("editcss").style.display = 'none' ;
 	document.getElementById("content").style.display = 'block' ;
 	force_scroll( document.documentElement, pct ) ;
+}
+function switch_textedit() {
+	if( document.getElementById('editor').style.display!='none' ) { 
+		document.getElementById('editor').style.display='none' ; 
+		document.getElementById('editcss').style.display='block' ;
+		textareaSelect( document.getElementById('tcss'), n, n ) ; 
+		document.getElementById('tcss').click() ; 
+	} else { 
+		document.getElementById('editcss').style.display='none' ;
+		document.getElementById('editor').style.display='block' ; 
+		textareaSelect( document.getElementById('ttxt'), n, n ) ; 
+		document.getElementById('ttxt').click() ; 
+	}
 }
 function doSave() { 
 	if( page!=null ) {
@@ -317,6 +332,22 @@ textarea, #editor div {
   position: relative;
   left: 50%;
 }
+#tcss {
+  resize: vertical;
+}
+textarea, #editcss div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+#editcss {
+  position: relative;
+  left: 0%;
+  height: 100%;
+}
 code {
   overflow-x: visible;
   overflow-wrap: break-word;
@@ -412,10 +443,14 @@ pre {
 </div>
 
 <div id="editor" style="display: none;">
-  <textarea id="ttxt" v-on:click="update" @keyup.alt.f1="doHelp();return false;" @keyup.alt.80="doPass();" @keyup.alt.83="doSave();" @keyup.alt.84="switch_style(null);" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
+  <textarea id="ttxt" v-on:click="update" @keyup.alt.f1="doHelp();return false;" @keyup.alt.80="doPass();" @keyup.alt.83="doSave();" @keyup.alt.84="switch_style(null);" @keyup.alt.89="switch_textedit(null);" @keyup.esc="switchToContent();" :value="input" @input="update" onScroll="doScroll(this);return false;"></textarea>
   <div v-html="compiledMarkdown"></div>
 </div>
 
+<div id="editcss" style="display: none;">
+  <textarea id="tcss" v-on:click="update" @keyup.alt.f1="doHelp();return false;" @keyup.alt.89="switch_textedit(null);" @keyup.esc="switchToContent();" :value="input" @input="update"></textarea>
+  <div v-html="compiledMarkdown2"></div>
+</div>
 <div id="content"></div>
 <!-- onDblClick="switchToEditor();" -->
 
@@ -428,6 +463,24 @@ new Vue({
   computed: {
     compiledMarkdown: function () {
       return doMarkdown( this.input )
+    }
+  },
+  methods: {
+    update: _.debounce(function (e) {
+      //document.getElementById('ttxt').style.height = document.getElementById("editor").scrollHeight + 'px' ;
+      this.input = e.target.value
+    }, 300)
+  }
+}) ;
+
+new Vue({
+  el: '#editcss',
+  data: {
+    input: 'html { font-family: sans-serif; }'
+  },
+  computed: {
+    compiledMarkdown2: function () {
+      return doMarkdown( document.getElementById('ttxt').value )
     }
   },
   methods: {
